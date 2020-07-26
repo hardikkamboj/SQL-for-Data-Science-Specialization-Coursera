@@ -1,0 +1,30 @@
+1 
+SELECT COUNT(ar.artistid)
+from artists ar INNER JOIN albums al
+ON ar.artistid = al.artistid
+WHERE name = 'Led Zeppelin'
+
+2.
+SELECT a.title,t.unitprice,a.artistid, ar.name
+FROM (tracks t INNER JOIN albums a 
+   ON t.albumid = a.albumid)
+   INNER JOIN artists ar ON ar.artistid = a.artistid
+WHERE ar.name = 'Audioslave'
+
+3.
+SELECT c.customerid,c.firstname,c.lastname,
+       i.invoiceid
+FROM customers c LEFT JOIN invoices i
+WHERE i.invoiceid is NULL
+
+4.
+SELECT a.title,a.albumid,SUM(unitprice)
+FROM tracks t INNER JOIN albums a 
+ON t.albumid = a.albumid
+WHERE a.title = 'Big Ones'
+GROUP BY a.title
+
+5.
+SELECT COUNT(*)
+FROM invoice_items CROSS JOIN invoices
+
