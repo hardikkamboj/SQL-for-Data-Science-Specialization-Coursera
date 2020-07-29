@@ -1,0 +1,35 @@
+1.
+SELECT customerid, (firstname || " " || lastname) as FullName,address,
+      UPPER(city || " " ||  country)
+FROM customers
+WHERE customerid = 16
+
+2.
+SELECT firstname,lastname, LOWER(SUBSTR(firstname,1,4) || SUBSTR(lastname,1,2))
+FROM employees
+
+3.
+SELECT firstname,lastname,
+      STRFTIME('%Y','now') -  STRFTIME('%Y',hiredate) as years_worked
+from employees
+WHERE years_worked >= 15
+ORDER BY lastname
+
+4.
+SELECT COUNT(*)
+FROM customers 
+WHERE firstname is NULL
+## Check for each col in the options and tick those which has more than 0.
+
+5.
+SELECT city,count(customerid) as c
+FROM customers
+GROUP BY city 
+ORDER BY c DESC
+
+6.
+SELECT c.firstname,c.lastname,i.invoiceid,
+       i.invoiceid || c.firstname || c.lastname as newid
+FROM customers c INNER JOIN invoices i
+on c.customerid = i.customerid
+ORDER BY c.firstname,c.lastname,i.invoiceid
