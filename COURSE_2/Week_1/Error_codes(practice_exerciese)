@@ -18,3 +18,16 @@ SELECT count(DISTINCT event_id)
 FROM dsv1069.events
 WHERE event_name = 'view_item'
 
+5.
+SELECT count(DISTINCT o.item_id)
+FROM dsv1069.orders o 
+
+6.
+SELECT u.id,CASE WHEN count(o.line_item_id)>0 THEN 1 ELSE 0 END as Have_ordered,min(o.paid_at) as first_purchase
+FROM dsv1069.users u LEFT JOIN dsv1069.orders o 
+on u.id = o.user_id
+GROUP BY u.id
+
+7.
+
+
