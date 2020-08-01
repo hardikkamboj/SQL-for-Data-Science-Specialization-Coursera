@@ -1,0 +1,20 @@
+1.
+SELECT email_address
+FROM dsv1069.users
+WHERE deleted_at is NULL
+
+2.
+SELECT category,count(id)
+FROM dsv1069.items
+GROUP by category
+
+3.
+SELECT *
+FROM dsv1069.users u JOIN dsv1069.orders o
+ON u.id = o.user_id
+
+4.
+SELECT count(DISTINCT event_id)
+FROM dsv1069.events
+WHERE event_name = 'view_item'
+
