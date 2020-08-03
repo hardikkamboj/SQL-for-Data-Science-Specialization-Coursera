@@ -29,5 +29,15 @@ on u.id = o.user_id
 GROUP BY u.id
 
 7.
+SELECT (sum(sub.max)*1.0 / count(sub.id) ) as percentage_of_viewed_profile
+FROM 
+(SELECT u.id, 
+  max(CASE 
+     WHEN e.event_name = 'view_user_profile' THEN 1 
+     ELSE 0
+  END )
+FROM dsv1069.users u LEFT JOIN dsv1069.events e 
+ON u.id = e.user_id
+GROUP BY u.id) as sub
 
 
