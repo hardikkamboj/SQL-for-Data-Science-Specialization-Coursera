@@ -1,0 +1,23 @@
+1.
+SELECT date(event_time) as date,
+       count(*)
+FROM dsv1069.events_201701
+GROUP BY date
+## The above table only contains dates for a single month, hence, cannot be trusted.
+2.
+SELECT  date(event_time) as date,
+      platform, 
+      count(*)
+FROM 
+    dsv1069.events_ex2
+GROUP BY 
+    date(event_time),platform
+    
+#plot the graph, and see the trends
+    
+    
+3.
+SELECT *
+FROM dsv1069.item_views_by_category_temp
+
+# there is no col for dates in this table.
