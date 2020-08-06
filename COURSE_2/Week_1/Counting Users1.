@@ -1,0 +1,69 @@
+1.
+SELECT *
+FROM dsv1069.users
+# in the first question, just make sure to know the data well. There' deleted at and merged columns to keep an eye on. 
+
+2.
+SELECT 
+      date(created_at),
+      count(*)
+FROM  
+    dsv1069.users
+GROUP BY 
+    date(created_at)
+ORDER BY 
+    date(created_at)
+    
+# remember this dones;t take in accound that users also deleted and merged their accounts. 
+
+3.
+SELECT 
+      date(created_at),
+      count(*)
+FROM  
+    dsv1069.users
+WHERE 
+    deleted_at is null 
+    AND 
+    (id <> parent_user_id OR parent_user_id is NULL)
+    
+GROUP BY 
+    date(created_at)
+ORDER BY 
+    date(created_at)
+    
+    
+4.
+--DELETED 
+SELECT 
+      date(deleted_at),
+      count(*)
+FROM  
+    dsv1069.users
+WHERE 
+    not deleted_at is null 
+GROUP BY 
+    date(deleted_at)
+    
+ORDER BY     
+    date(deleted_at)
+    
+--MERGED 
+SELECT 
+      date(merged_at),
+      count(*)
+FROM  
+    dsv1069.users
+WHERE 
+    not (id <> parent_user_id OR parent_user_id is NULL)
+GROUP BY 
+    date(merged_at)
+    
+ORDER BY     
+    date(merged_at)
+    
+    
+5.
+
+    
+    
