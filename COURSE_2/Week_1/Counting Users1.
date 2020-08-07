@@ -64,6 +64,100 @@ ORDER BY
     
     
 5.
-
+SELECT c.date,c.total_created,d.total_deleted,m.total_merged
+FROM 
+    (SELECT date(created_at) as date,count(*) as total_created 
+    FROM dsv1069.users
+    GROUP BY date(created_at)) as c 
+  LEFT JOIN 
+    (SELECT date(deleted_at) as date,count(*) as total_deleted
+    FROM dsv1069.users 
+    GROUP BY date(deleted_at)) as d 
+    on c.date = d.date 
+  LEFT JOIN 
+    (SELECT 
+      date(merged_at) as date,
+      count(*) as total_merged
+      FROM  
+          dsv1069.users
+      WHERE 
+          not (id <> parent_user_id OR parent_user_id is NULL)
+      GROUP BY 
+          date(merged_at)
+    ) as m 
+    on c.date = m.date
     
+ 6.
+  
+SELECT c.date,c.total_created,
+      COALESCE(d.total_deleted,0) as total_deleted,
+      COALESCE(m.total_merged,0) as total_merged,
+      (c.total_created -  COALESCE(d.total_deleted,0) - COALESCE(m.total_merged,0)) as total_added
+FROM 
+    (SELECT date(created_at) as date,count(*) as total_created 
+    FROM dsv1069.users
+    GROUP BY date(created_at)) as c 
+  LEFT JOIN 
+    (SELECT date(deleted_at) as date,count(*) as total_deleted
+    FROM dsv1069.users 
+    GROUP BY date(deleted_at)) as d 
+    on c.date = d.date 
+  LEFT JOIN 
+    (SELECT 
+      date(merged_at) as date,
+      count(*) as total_merged
+      FROM  
+          dsv1069.users
+      WHERE 
+          not (id <> parent_user_id OR parent_user_id is NULL)
+      GROUP BY 
+          date(merged_at)
+    ) as m 
+    on c.date = m.date
+    
+    # converted null values in total_deleted and total_merget columns to 0. And adding a new col which shows the number of added users. 
+      
+      
+      7.
+      SELECT a.date,
+       b.total_created,
+       b.total_deleted,
+       b.total_merged,
+       b.total_added
+FROM 
+    dsv1069.dates_rollup a 
+    LEFT JOIN 
+    (SELECT c.date,c.total_created,
+        COALESCE(d.total_deleted,0) as total_deleted,
+        COALESCE(m.total_merged,0) as total_merged,
+        (c.total_created -  COALESCE(d.total_deleted,0) - COALESCE(m.total_merged,0)) as total_added
+  FROM 
+      (SELECT date(created_at) as date,count(*) as total_created 
+      FROM dsv1069.users
+      GROUP BY date(created_at)) as c 
+    LEFT JOIN 
+      (SELECT date(deleted_at) as date,count(*) as total_deleted
+      FROM dsv1069.users 
+      GROUP BY date(deleted_at)) as d 
+      on c.date = d.date 
+    LEFT JOIN 
+      (SELECT 
+        date(merged_at) as date,
+        count(*) as total_merged
+        FROM  
+            dsv1069.users
+        WHERE 
+            not (id <> parent_user_id OR parent_user_id is NULL)
+        GROUP BY 
+            date(merged_at)
+      ) as m 
+      on c.date = m.date
+      
+  ) b
+    on a.date = b.date
+
+       
+       
+       
+        
     
